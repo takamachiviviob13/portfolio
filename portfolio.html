@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio de Elite | eSports</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        :root {
+            --cor-fundo-profundo: #050505;
+            --cor-fundo-elevado: #0a0a0c;
+            --cor-brilho-hextech: #00f2ff;
+            --cor-brilho-vazio: #7000ff;
+            --cor-texto-puro: #ffffff;
+            --cor-texto-opaco: rgba(255, 255, 255, 0.6);
+            --borda-sutil: rgba(255, 255, 255, 0.08);
+            --curva-premium: cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: default;
+        }
+
+        body {
+            background-color: var(--cor-fundo-profundo);
+            color: var(--cor-texto-puro);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        .camada-de-fundo {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(0, 242, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(112, 0, 255, 0.05) 0%, transparent 40%);
+        }
+
+        .barra-de-navegacao {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-radius: 100px;
+            border: 1px solid var(--borda-sutil);
+            display: flex;
+            gap: 32px;
+            opacity: 0;
+        }
+
+        .item-de-navegacao {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--cor-texto-opaco);
+            text-decoration: none;
+            transition: color 0.3s var(--curva-premium);
+            cursor: pointer;
+        }
+
+        .item-de-navegacao:hover {
+            color: var(--cor-brilho-hextech);
+        }
+
+        .secao-hero {
+            padding-top: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-left: 20px;
+            padding-right: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .titulo-impactante {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 900;
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, 0.4) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .subtitulo-suave {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--cor-texto-opaco);
+            max-width: 800px;
+            opacity: 0;
+            transform: translateY(20px);
+            line-height: 1.4;
+        }
+
+        .envoltorio-bento {
+            width: 95%;
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 60px 24px 100px 24px;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 32px;
+            grid-auto-flow: dense;
+        }
+
+        .cartao-lendario {
+            position: relative;
+            grid-column: span 4;
+            border-radius: 32px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--borda-sutil);
+            overflow: hidden;
+            transition: transform 0.6s var(--curva-premium);
+            opacity: 0;
+            transform: translateY(60px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cartao-lendario.grande {
+            grid-column: span 6;
+        }
+
+        .cartao-lendario {
+            grid-column: span 6;
+        }
+
+        .cartao-lendario:hover {
+            transform: scale(1.02);
+            border-color: rgba(0, 242, 255, 0.2);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+            z-index: 10;
+        }
+
+        .moldura-externa {
+            padding: 12px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nucleo-interno {
+            flex-grow: 1;
+            background: var(--cor-fundo-elevado);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        }
+
+        .topo-do-cartao {
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .badge-categoria {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 100px;
+            color: var(--cor-brilho-hextech);
+        }
+
+        .titulo-do-projeto {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 12px;
+            max-width: 80%;
+        }
+
+        .area-do-video {
+            position: relative;
+            width: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .area-do-video iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            opacity: 0.8;
+            transition: opacity 0.4s var(--curva-premium);
+        }
+
+        .area-do-contato-hero {
+            margin-top: 60px;
+            margin-bottom: 0px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            opacity: 0.85;
+        }
+
+        .titulo-contato {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--cor-brilho-hextech);
+            margin-bottom: 5px;
+        }
+
+        .link-contato {
+            font-size: 1.4rem;
+            font-weight: 300;
+            color: var(--cor-texto-puro);
+            text-decoration: none;
+            transition: all 0.3s var(--curva-premium);
+            width: fit-content;
+        }
+
+        .link-contato:hover {
+            color: var(--cor-brilho-hextech);
+            transform: translateX(15px);
+        }
+
+        .detalhe-contato {
+            font-size: 1rem;
+            color: var(--cor-texto-opaco);
+            max-width: 400px;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .proporcao-21-9 {
+            aspect-ratio: 21 / 9;
+        }
+
+        .proporcao-16-9 {
+            aspect-ratio: 16 / 9;
+        }
+
+        .proporcao-4-3 {
+            aspect-ratio: 4 / 3;
+        }
+
+        .cartao-lendario:hover iframe {
+            opacity: 1;
+        }
+
+        .rodape-minimalista {
+            text-align: center;
+            padding: 100px 24px;
+            border-top: 1px solid var(--borda-sutil);
+        }
+
+        .texto-rodape {
+            color: var(--cor-texto-opaco);
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 1024px) {
+            .envoltorio-bento {
+                grid-template-columns: repeat(1, 1fr);
+                grid-auto-rows: auto;
+            }
+
+            .cartao-lendario,
+            .cartao-lendario.grande,
+            .cartao-lendario.alto {
+                grid-column: span 1;
+                grid-row: auto;
+                min-height: 400px;
+            }
+
+            .titulo-impactante {
+                font-size: 4rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="camada-de-fundo"></div>
+
+    <nav class="barra-de-navegacao">
+        <a href="#" class="item-de-navegacao">Início</a>
+        <a href="#" class="item-de-navegacao">Projetos</a>
+        <a href="#" class="item-de-navegacao">Contato</a>
+    </nav>
+
+    <header class="secao-hero">
+        <h1 class="titulo-impactante">Portfólio<br>do ADM/Stratos</h1>
+        <p class="subtitulo-suave">Vídeos selecionados para tentar passar na seleção, eu tive várias páginas, uma de
+            18k, uma de 9k (que ainda tenho) uma nova que é essa de vtuber e algumas paradas que não uso.<br><br>Como
+            pode ver, eu gosto de tentar sincronizar as coisas o máximo possível, principalmente legenda com a fala.</p>
+
+        <div class="area-do-contato-hero">
+            <span class="titulo-contato">Contato</span>
+            <a href="mailto:nanohatakamachib13@gmail.com" class="link-contato">nanohatakamachib13@gmail.com</a>
+            <a href="https://www.facebook.com/lux.dedemacia.94" target="_blank"
+                class="link-contato">facebook.com/lux.dedemacia.94</a>
+            <p class="detalhe-contato">Ou então em qualquer perfil/página que postei vídeo e coloquei no portfólio.</p>
+        </div>
+    </header>
+
+    <main class="envoltorio-bento">
+
+        <!-- LINHA 1 -->
+        <div class="cartao-lendario">
+            <div class="moldura-externa">
+                <div class="nucleo-interno">
+                    <div class="topo-do-cartao">
+                        <div>
+                            <span class="badge-categoria">Destaque</span>
+                            <h3 class="titulo-do-projeto">François News</h3>
+                        </div>
+                    </div>
+                    <div class="area-do-video proporcao-21-9">
+                        <iframe
+                            src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F4193452957596114%2F&show_text=false&t=0"
+                            scrolling="no" frameborder="0" allowfullscreen="true"
+                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cartao-lendario">
+            <div class="moldura-externa">
+                <div class="nucleo-interno">
+                    <div class="topo-do-cartao">
+                        <div>
+                            <span class="badge-categoria">Gameplay</span>
+                            <h3 class="titulo-do-projeto">Homenagem ao Alistar</h3>
+                        </div>
+                    </div>
+                    <div class="area-do-video proporcao-16-9">
+                        <iframe
+                            src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FHanaStratos%2Fvideos%2F1196236655142658%2F%3Fidorvanity%3D144817246053266&show_text=false&t=0"
+                            scrolling="no" frameborder="0" allowfullscreen="true"
+                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LINHA 2 -->
+        <div class="cartao-lendario">
+            <div class="moldura-externa">
+                <div class="nucleo-interno">
+                    <div class="topo-do-cartao">
+                        <div>
+                            <span class="badge-categoria">Clássico</span>
+                            <h3 class="titulo-do-projeto">Sincronização Datena</h3>
+                        </div>
+                    </div>
+                    <div class="area-do-video proporcao-4-3">
+                        <iframe
+                            src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F962458319660059%2F&show_text=false&t=0"
+                            scrolling="no" frameborder="0" allowfullscreen="true"
+                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cartao-lendario">
+            <div class="moldura-externa">
+                <div class="nucleo-interno">
+                    <div class="topo-do-cartao">
+                        <div>
+                            <span class="badge-categoria">História</span>
+                            <h3 class="titulo-do-projeto">historia de uma call de 10 pessoas na partida</h3>
+                        </div>
+                    </div>
+                    <div class="area-do-video proporcao-16-9">
+                        <iframe
+                            src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FHanaStratos%2Fvideos%2F802411309231375%2F%3Fidorvanity%3D144817246053266&show_text=false&t=0"
+                            scrolling="no" frameborder="0" allowfullscreen="true"
+                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LINHA 3 -->
+        <div class="cartao-lendario">
+            <div class="moldura-externa">
+                <div class="nucleo-interno">
+                    <div class="topo-do-cartao">
+                        <div>
+                            <span class="badge-categoria">Equipe</span>
+                            <h3 class="titulo-do-projeto">Nosso Time de LoL</h3>
+                        </div>
+                    </div>
+                    <div class="area-do-video proporcao-16-9">
+                        <iframe
+                            src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FHanaStratos%2Fvideos%2F862701552287772%2F%3Fidorvanity%3D144817246053266&show_text=false&t=0"
+                            scrolling="no" frameborder="0" allowfullscreen="true"
+                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cartao-lendario">
+            <div class="moldura-externa">
+                <div class="nucleo-interno">
+                    <div class="topo-do-cartao">
+                        <div>
+                            <span class="badge-categoria">Edição</span>
+                            <h3 class="titulo-do-projeto"> Quando aprendi a editar com o Filmora</h3>
+                        </div>
+                    </div>
+                    <div class="area-do-video proporcao-16-9">
+                        <iframe
+                            src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FHanaStratos%2Fvideos%2F1123753718752926%2F%3Fidorvanity%3D144817246053266&show_text=false&t=0"
+                            scrolling="no" frameborder="0" allowfullscreen="true"
+                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="rodape-minimalista">
+        <p class="texto-rodape">© 2026 eSports Elite Organization. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const linha_tempo = gsap.timeline({ defaults: { ease: 'power4.out', duration: 1.5 } });
+
+            linha_tempo
+                .to('.barra-de-navegacao', { opacity: 1, top: '24px', duration: 1 })
+                .to('.titulo-impactante', { opacity: 1, y: 0, stagger: 0.2 }, '-=1')
+                .to('.subtitulo-suave', { opacity: 1, y: 0 }, '-=1.2')
+                .to('.cartao-lendario', {
+                    opacity: 1,
+                    y: 0,
+                    stagger: {
+                        amount: 0.8,
+                        grid: [3, 4],
+                        from: 'start'
+                    }
+                }, '-=1');
+
+            gsap.to('.camada-de-fundo', {
+                scrollTrigger: {
+                    trigger: 'body',
+                    start: 'top top',
+                    end: 'bottom bottom',
+                    scrub: 2
+                },
+                backgroundPosition: '50% 100%'
+            });
+
+            const cartoes = document.querySelectorAll('.cartao-lendario');
+            cartoes.forEach(cartao => {
+                cartao.addEventListener('mouseenter', () => {
+                    anime({
+                        targets: cartao.querySelector('.nucleo-interno'),
+                        scale: 1.01,
+                        duration: 800,
+                        easing: 'easeOutElastic(1, .6)'
+                    });
+                });
+                cartao.addEventListener('mouseleave', () => {
+                    anime({
+                        targets: cartao.querySelector('.nucleo-interno'),
+                        scale: 1,
+                        duration: 600,
+                        easing: 'easeOutExpo'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
