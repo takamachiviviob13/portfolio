@@ -1,2 +1,2 @@
 # portfolio
-portfolio pra tentar a sorte
+portfolio pra tentar a sorte com a EiNerd
